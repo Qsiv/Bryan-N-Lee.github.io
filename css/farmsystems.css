@@ -1,0 +1,120 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+}
+
+/* * * * * *
+ *  Menu
+ * * * * * */
+
+#menu {
+    width: 10%;
+    height: 100%;
+    box-sizing:border-box;
+    background-color: #f2f2f2;
+    float: left;
+}
+
+.button {
+    background-color: #00483A;
+    color: #fff;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 83%;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #00483A;
+    border-radius: 2px;
+}
+
+.button:hover {
+    background-color: #006957;
+    transition: 0.3s ease all;
+    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.button:active {
+    background-color: #fff;
+    color: #006957;
+    border-color: #006957;
+    transition: 0.3s ease all;
+    box-shadow: none;
+    transform: none;
+}
+
+.active {
+    background-color: #FFBE00;
+    cursor: default;
+}
+
+.active:hover {
+    background-color: #FFBE00;
+    transition: none;
+    box-shadow: none;
+    transform: none;
+}
+
+.active:active {
+    background-color: #FFBE00;
+}
+
+/* * * * * *
+ *  Table
+ * * * * * */
+
+#table {
+    width: 90%;
+    height: 100%;
+    box-sizing:border-box;
+    float: right;
+}
+
+#prospects_table_wrapper {
+    margin-top: 30px;
+}
+
+table.dataTable thead td {
+    font-size: 1.15em;
+    font-weight: bold;
+}
+
+table.dataTable tbody td {
+    padding-left: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+table.dataTable .even {
+    box-sizing:border-box;
+    border: 1px solid #000;
+    background-color: #fafafa;
+
+}
+
+.grade_a {
+    color: #001FD3
+}
+
+.grade_b {
+    color: #007E0A
+}
+
+.grade_c {
+    color: #CDCA00
+}
+
+.grade_d {
+    color: #9F5D00
+}
+
+.grade_low {
+    color: #9F0600
+}
