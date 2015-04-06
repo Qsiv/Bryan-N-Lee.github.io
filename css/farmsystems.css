@@ -12,19 +12,22 @@ main {
  * * * * * */
 
 #menu {
-    width: 10%;
+    width: 12%;
     height: 100%;
     box-sizing:border-box;
     background-color: #f2f2f2;
+    font-size: 12px;
     float: left;
 }
+
+/* * * * * *
+ *  Buttons
+ * * * * * */
 
 .button {
     background-color: #00483A;
     color: #fff;
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 30px auto 0 auto;
     text-align: center;
     width: 83%;
     cursor: pointer;
@@ -32,10 +35,18 @@ main {
     padding-bottom: 10px;
     border: 1px solid #00483A;
     border-radius: 2px;
+    box-shadow: 0 3px 17px 0 rgba(0, 0, 0, 0.2);
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
 }
 
 .button:hover {
     background-color: #006957;
+    color: #fff;
+    text-decoration: none;
     transition: 0.3s ease all;
     box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
@@ -48,37 +59,106 @@ main {
     transition: 0.3s ease all;
     box-shadow: none;
     transform: none;
+    text-decoration: none;
+}
+
+.non-team {
+    background-color: #14C239;
+}
+
+.non-team:hover {
+    background-color: #18d545;
+}
+
+.non-team:active {
+    background-color: #fff;
+    color: #18d545;
+    border-color: #18d545;
 }
 
 .active {
     background-color: #FFBE00;
     cursor: default;
+    text-decoration: none;
+    pointer-events: none;
 }
 
 .active:hover {
     background-color: #FFBE00;
+    box-shadow: 0 3px 17px 0 rgba(0, 0, 0, 0.2);
     transition: none;
-    box-shadow: none;
     transform: none;
 }
 
 .active:active {
     background-color: #FFBE00;
+    color: #fff;
+    border: 1px solid #00483A;
+}
+
+.submit {
+    background-color: #1684d2;
+    border-color: #1564a3;
+}
+
+.submit:hover {
+    background-color: #1898ef;
+}
+
+.submit:active {
+    background-color: #fff;
+    color: #1898ef;
+    border-color: #1898ef;
+}
+
+.cancel {
+    background-color: #ff2f23;
+    border-color: #cb3f36;
+}
+
+.cancel:hover {
+    background-color: #ff6054;
+}
+
+.cancel:active {
+    background-color: #fff;
+    color: #ff6054;
+    border-color: #ff6054;
+}
+
+/* * * * * *
+ *  Content
+ * * * * * */
+
+#page_link {
+    font-size: 11px;
+    float: right;
+}
+
+#submit_trade_sec {
+    margin-top: 45px;
+    margin-left: 50px;
+}
+
+#content {
+    width: 88%;
+    height: 100%;
+    box-sizing:border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+    float: right;
 }
 
 /* * * * * *
  *  Table
  * * * * * */
 
-#table {
-    width: 90%;
-    height: 100%;
-    box-sizing:border-box;
-    float: right;
+#prospects_table {
+    border-bottom: 0;
 }
 
 #prospects_table_wrapper {
-    margin-top: 30px;
+    margin-top: 34px;
 }
 
 table.dataTable thead td {
@@ -99,6 +179,10 @@ table.dataTable .even {
 
 }
 
+#prospects_table thead tr td {
+    border: 0px;
+}
+
 .grade_a {
     color: #001FD3
 }
@@ -117,4 +201,26 @@ table.dataTable .even {
 
 .grade_low {
     color: #9F0600
+}
+
+input {
+    margin-top: 1px;
+}
+
+/* * * * * *
+ *  Messages
+ * * * * * */
+
+#message {
+    margin: 60px auto 0 auto;
+    border: 1px solid #763838;
+    border-radius: 2px;
+    width: 83%;
+    height: 15%;
+    line-height: 17px;
+    background-color: #FFCBCA;
+}
+
+.hidden {
+    display: none;
 }

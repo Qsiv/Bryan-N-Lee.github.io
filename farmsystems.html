@@ -1,26 +1,165 @@
 <html>
 <head lang="en">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/css/chosen.css">
+    <link rel="stylesheet" type="text/css" href="css/submit_trade.css">
     <link rel="stylesheet" type="text/css" href="css/farmsystems.css">
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-    <script src="js/farmsystem.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="lib/js/chosen.jquery.js" type="text/javascript"></script>
+    <script src="js/config.js" type="text/javascript"></script>
+    <script src="js/trades.js" type="text/javascript"></script>
+    <script src="js/farmsystem.js" type="text/javascript"></script>
     <title>Farm Systems</title>
 </head>
 <body>
     <main>
         <div id="menu">
-            <div class="button active" id="prospects">Claimed Prospects</div>
-            <div class="button" id="bryan">Bryan</div>
-            <div class="button" id="cary">Cary</div>
-            <div class="button" id="larry">Larry</div>
-            <div class="button" id="mike">Mike</div>
-            <div class="button" id="mitchel">Mitchel</div>
-            <div class="button" id="tad">Tad</div>
+            <a class="button active" id="prospects" href="farmsystems.html">Claimed Prospects</a>
+            <a class="button" id="bryan" href="farmsystems.html?team=bryan">Bryan</a>
+            <a class="button" id="cary" href="farmsystems.html?team=cary">Cary</a>
+            <a class="button" id="larry" href="farmsystems.html?team=larry">Larry</a>
+            <a class="button" id="mike" href="farmsystems.html?team=mike">Mike</a>
+            <a class="button" id="mitchel" href="farmsystems.html?team=mitchel">Mitchel</a>
+            <a class="button" id="tad" href="farmsystems.html?team=tad">Tad</a>
+            <a class="button non-team" id="pending_trades" href="farmsystems.html?team=pending">Pending Trades</a>
+            <a class="button non-team" id="submit_trade" href="farmsystems.html?team=submit">Submit Trade</a>
         </div>
-        <div id="table">
+        <div id="content">
+            <a id="page_link" href="#">Link to page</a>
+            <div id="message" class="alert hidden" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <table id="prospects_table"></table>
+            <div id="pending_trades_sec" class="hidden"></div>
+            <div id="submit_trade_sec" class="hidden">
+                <table id="submit_trade_form">
+                    <thead>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <select data-placeholder="Select Team" class="chosen-select" id="team1">
+                                <option></option>
+                                <option value="bryan">Bryan</option>
+                                <option value="cary">Cary</option>
+                                <option value="larry">Larry</option>
+                                <option value="mike">Mike</option>
+                                <option value="mitchel">Mitchel</option>
+                                <option value="tad">Tad</option>
+                            </select>
+                            <p>Sends:</p>
+                        </td>
+                        <td>
+                            <select data-placeholder="Select Team" class="chosen-select" id="team2" style="width:100%">
+                                <option></option>
+                                <option value="bryan">Bryan</option>
+                                <option value="cary">Cary</option>
+                                <option value="larry">Larry</option>
+                                <option value="mike">Mike</option>
+                                <option value="mitchel">Mitchel</option>
+                                <option value="tad">Tad</option>
+                            </select>
+                            <p>Sends:</p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Prospect 1</td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team1-p1" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team2-p1" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Prospect 2</td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team1-p2" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team2-p2" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Prospect 3</td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team1-p3" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team2-p3" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Prospect 4</td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team1-p4" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team2-p4" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Prospect 5</td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team1-p5" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team2-p5" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Prospect 6</td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team1-p6" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select data-placeholder="Prospect" class="chosen-select" id="team2-p6" style="width:100%;">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="button submit" id="submit_trade_btn">Submit Trade Proposal</div>
+                        </td>
+                        <td>
+                            <div class="button cancel" id="cancel_trade_btn">Cancel</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </body>

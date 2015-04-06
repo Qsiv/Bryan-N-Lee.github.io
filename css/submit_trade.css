@@ -1,0 +1,47 @@
+
+input {
+    margin: 1px 0;
+    padding: 0;
+    height: 25px;
+    outline: 0;
+    background: transparent !important;
+    box-shadow: none;
+    color: #999;
+    font-size: 100%;
+    font-family: sans-serif;
+    line-height: normal;
+    border-radius: 2px;
+}
+
+thead td {
+    padding-bottom: 2px;
+}
+
+tbody td {
+    padding-bottom: 30px;
+}
+
+table td:not(:first-child){
+    width: 260px;
+    padding-right: 40px;
+}
+
+tbody tr td:first-child {
+    width: 70px;
+    padding-right: 5px;
+}
+
+select {
+    width: 100%;
+}
+
+#submit_trade_form thead tr td p{
+    text-align: center;
+    padding-top: 5px;
+}
+
+#submit_trade_form {
+    /*background-color: #ddd;*/
+    /*padding: 10px;*/
+    /*border-radius: 5px;*/
+}
