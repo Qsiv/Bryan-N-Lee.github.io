@@ -192,8 +192,8 @@ function selectElements() {
     elements.message = $('#message');
     elements.page_link = $('#page_link');
     elements.submit_trade_sec = $('#submit_trade_sec');
-    elements.pending_trades_sec = $('#pending_trades_sec');
     elements.pending_trades_table = $('#pending_trades_table');
+    elements.completed_trades_table = $('#completed_trades_table');
 }
 
 function getUrlParameter(sParam) {
@@ -389,7 +389,17 @@ function showProspectsTable() {
     $('.active').removeClass('active');
     elements.table.removeClass('hidden');
     elements.submit_trade_sec.addClass('hidden');
-    elements.pending_trades_sec.addClass('hidden');
+    elements.pending_trades_table.addClass('hidden');
+    elements.completed_trades_table.addClass('hidden');
+}
+
+function showCompletedTrades() {
+    $('#message').remove();
+    $('.active').removeClass('active');
+    elements.table.addClass('hidden');
+    elements.submit_trade_sec.addClass('hidden');
+    elements.pending_trades_table.addClass('hidden');
+    elements.completed_trades_table.removeClass('hidden');
 }
 
 function showPendingTrades() {
@@ -397,7 +407,8 @@ function showPendingTrades() {
     $('.active').removeClass('active');
     elements.table.addClass('hidden');
     elements.submit_trade_sec.addClass('hidden');
-    elements.pending_trades_sec.removeClass('hidden');
+    elements.pending_trades_table.removeClass('hidden');
+    elements.completed_trades_table.addClass('hidden');
 }
 
 function showSubmitTrades() {
@@ -405,7 +416,8 @@ function showSubmitTrades() {
     $('.active').removeClass('active');
     elements.table.addClass('hidden');
     elements.submit_trade_sec.removeClass('hidden');
-    elements.pending_trades_sec.addClass('hidden');
+    elements.pending_trades_table.addClass('hidden');
+    elements.completed_trades_table.addClass('hidden');
 }
 
 /*
@@ -470,7 +482,9 @@ function attachBtnActions() {
 
     elements.completed_trades_btn.on('click', function(e) {
         e.preventDefault();
-        $('#message').remove();
+        showCompletedTrades();
+        elements.completed_trades_btn.addClass('active');
+        loadAllProspects(completed_trades.load);
         elements.page_link.attr('href', 'farmsystems.html?team=completed');
     });
 

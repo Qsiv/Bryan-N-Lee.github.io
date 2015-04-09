@@ -27,8 +27,8 @@ var elements = {
     message: null,
     page_link: null,
     submit_trade_sec: null,
-    pending_trades_sec: null,
-    pending_trades_table: null
+    pending_trades_table: null,
+    completed_trades_table: null
 };
 
 var config_data = {
@@ -101,6 +101,7 @@ function loadAllProspects(callbackFunction) {
             }
         });
         if (callbackFunction) {
+            console.log(callbackFunction);
             callbackFunction();
         }
     }).fail(function(){

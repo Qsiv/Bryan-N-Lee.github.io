@@ -154,7 +154,8 @@ main {
 
 #submit_trade_sec {
     position: absolute;
-    top: 65px;
+    top: 16%;
+    left: 28%;
     margin-left: 50px;
 }
 
@@ -177,12 +178,12 @@ main {
     position: relative;
 }
 
-table.dataTable thead td {
+#prospects_table thead td {
     font-size: 1.15em;
     font-weight: bold;
 }
 
-table.dataTable tbody td {
+#prospects_table tbody td {
     padding-left: 18px;
     padding-top: 10px;
     padding-bottom: 10px;
