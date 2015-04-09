@@ -1,18 +1,20 @@
 <html>
 <head lang="en">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" type="text/css" href="lib/css/chosen.css">
     <link rel="stylesheet" type="text/css" href="css/submit_trade.css">
+    <link rel="stylesheet" type="text/css" href="css/pending_trades.css">
     <link rel="stylesheet" type="text/css" href="css/farmsystems.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
     <script src="lib/js/chosen.jquery.js" type="text/javascript"></script>
     <script src="js/config.js" type="text/javascript"></script>
     <script src="js/trades.js" type="text/javascript"></script>
+    <script src="js/pending_trades.js" type="text/javascript"></script>
     <script src="js/farmsystem.js" type="text/javascript"></script>
     <title>Farm Systems</title>
 </head>
@@ -26,19 +28,17 @@
             <a class="button" id="mike" href="farmsystems.html?team=mike">Mike</a>
             <a class="button" id="mitchel" href="farmsystems.html?team=mitchel">Mitchel</a>
             <a class="button" id="tad" href="farmsystems.html?team=tad">Tad</a>
+            <a class="button non-team" id="completed_trades" href="farmsystems.html?team=completed">Completed Trades</a>
             <a class="button non-team" id="pending_trades" href="farmsystems.html?team=pending">Pending Trades</a>
-            <a class="button non-team" id="submit_trade" href="farmsystems.html?team=submit">Submit Trade</a>
+            <a class="button non-team last-button" id="submit_trade" href="farmsystems.html?team=submit">Submit Trade</a>
         </div>
         <div id="content">
             <a id="page_link" href="#">Link to page</a>
-            <div id="message" class="alert hidden" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
             <table id="prospects_table"></table>
-            <div id="pending_trades_sec" class="hidden"></div>
-            <div id="submit_trade_sec" class="hidden">
+            <div id="pending_trades_sec" class="hidden">
+                <table id="pending_trades_table"></table>
+            </div>
+            <div id="submit_trade_sec">
                 <table id="submit_trade_form">
                     <thead>
                     <tr>

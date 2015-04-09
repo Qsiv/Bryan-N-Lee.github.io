@@ -40,28 +40,6 @@ function applyCustomSorting() {
  *  Config
  */
 
-var elements = {
-    content: null,
-    table: null,
-    table_body: null,
-    active_datatable: null,
-    prospects_btn: null,
-    bryan_btn: null,
-    cary_btn: null,
-    larry_btn: null,
-    mike_btn: null,
-    mitchel_btn: null,
-    tad_btn: null,
-    pending_trades_btn: null,
-    submit_trades_btn: null,
-    submit_trade_btn: null,
-    cancel_trade_btn: null,
-    message: null,
-    page_link: null,
-    submit_trade_sec: null,
-    pending_trades_sec: null
-};
-
 var farmsystem_config = {
     position_column: 0,
     player_column: 1,
@@ -72,8 +50,7 @@ var farmsystem_config = {
     fangraphs_column: 6,
     team_column: 7,
     columnDefs: null,
-    errorMsg: '<p>An error occurred while attempting to receive the team\'s players (Network connection error?)</p>',
-    tradeSentMsg_success: '<p>The trade proposal was successfully submitted (You can view it in <i>Pending Trades</i></p>'
+    errorMsg: 'An error occurred while attempting to receive the team\'s players (Network connection error?)'
 };
 
 var columns = [{
@@ -207,6 +184,7 @@ function selectElements() {
     elements.mike_btn = $('#mike');
     elements.mitchel_btn = $('#mitchel');
     elements.tad_btn = $('#tad');
+    elements.completed_trades_btn = $('#completed_trades');
     elements.pending_trades_btn = $('#pending_trades');
     elements.submit_trades_btn = $('#submit_trade');
     elements.submit_trade_btn = $('#submit_trade_btn');
@@ -215,6 +193,7 @@ function selectElements() {
     elements.page_link = $('#page_link');
     elements.submit_trade_sec = $('#submit_trade_sec');
     elements.pending_trades_sec = $('#pending_trades_sec');
+    elements.pending_trades_table = $('#pending_trades_table');
 }
 
 function getUrlParameter(sParam) {
@@ -235,12 +214,15 @@ function init() {
         farmsystem_config.columnDefs.push(column.columnDef)
     });
     applyCustomSorting();
+    selectElements();
+    attachBtnActions();
 }
 
 function start() {
+    loadAllProspects();
     init();
-    selectElements();
-    attachBtnActions();
+    trades.init();
+    elements.submit_trade_sec.addClass('hidden');
     var team = getUrlParameter('team');
     if (team === ''){
         showAllData();
@@ -265,6 +247,9 @@ function start() {
             case 'tad':
                 elements.tad_btn.trigger('click');
                 break;
+            case 'completed':
+                elements.completed_trades_btn.trigger('click');
+                break;
             case 'pending':
                 elements.pending_trades_btn.trigger('click');
                 break;
@@ -281,20 +266,6 @@ function start() {
  *  Table
  */
 
-function showError(header, message) {
-    elements.message.removeClass('hidden');
-    elements.message.addClass('alert-danger alert-dismissible fade in');
-    elements.message.append('<h4>' + header + '</h4>');
-    elements.message.append(message);
-}
-
-function showSuccess(header, message) {
-    elements.message.removeClass('hidden');
-    elements.message.addClass('alert-success');
-    elements.message.append('<h4>' + header + '</h4>');
-    elements.message.append(message);
-}
-
 function clearTable() {
     if (elements.active_datatable) {
         elements.active_datatable.destroy();
@@ -302,16 +273,19 @@ function clearTable() {
     elements.table.empty();
 }
 
+
 function showTeamData(team) {
     var query = encodeURIComponent(JSON.stringify({
         "team" : team
     }));
     $.ajax({
-        url: config.mongolabURL + 'baseball/collections/team_prospects?q=' + query + '&apiKey=' + config.mongolabApiKey,
+        url: config.mongolabURL + config.team_prospectsURL + '?q=' + query + '&apiKey=' + config.mongolabApiKey,
         dataType: 'json',
         type: 'GET'
     }).done(function(data){
-        elements.message.addClass('hidden');
+        elements.message.remove();
+        elements.submit_trade_sec.addClass('hidden');
+        elements.table.removeClass('hidden');
         if (elements.active_datatable) {
             replaceData(data);
         } else {
@@ -340,7 +314,9 @@ function showAllData() {
         dataType: 'json',
         type: 'GET'
     }).done(function(data){
-        elements.message.addClass('hidden');
+        elements.message.remove();
+        elements.submit_trade_sec.addClass('hidden');
+        elements.table.removeClass('hidden');
         if (elements.active_datatable) {
             replaceData(data);
         } else {
@@ -357,20 +333,6 @@ function showAllData() {
     }).fail(function() {
         clearTable();
         showError('Error', farmsystem_config.errorMsg);
-    });
-}
-
-function sendTradeProposal() {
-    var trade_proposal_json = JSON.stringify(trades.getTradeProposal());
-    $.ajax({
-        url: config.mongolabURL + config.trade_proposalsURL + '?apiKey=' + config.mongolabApiKey,
-        data: trade_proposal_json,
-        contentType: 'application/json',
-        type: 'POST'
-    }).done(function(data){
-        showSuccess('Success', farmsystem_config.tradeSentMsg_success);
-    }).fail(function(){
-        console.log('error');
     });
 }
 
@@ -391,9 +353,6 @@ function addHeaders(){
     var tr = $('<tr></tr>');
     $.each(columns, function(index, column) {
         var header = column.name;
-        //if (column.key === 'player') {
-        //    header += '<br><input type="text" id="filter-' + column.key + '" placeholder="Filter ' + column.name + '" />';
-        //}
         var td = $('<td></td>').html(header);
         tr.append(td);
     });
@@ -425,87 +384,126 @@ function addRow(row_data){
     elements.table.append(row);
 }
 
+function showProspectsTable() {
+    $('#message').remove();
+    $('.active').removeClass('active');
+    elements.table.removeClass('hidden');
+    elements.submit_trade_sec.addClass('hidden');
+    elements.pending_trades_sec.addClass('hidden');
+}
+
+function showPendingTrades() {
+    $('#message').remove();
+    $('.active').removeClass('active');
+    elements.table.addClass('hidden');
+    elements.submit_trade_sec.addClass('hidden');
+    elements.pending_trades_sec.removeClass('hidden');
+}
+
+function showSubmitTrades() {
+    $('#message').remove();
+    $('.active').removeClass('active');
+    elements.table.addClass('hidden');
+    elements.submit_trade_sec.removeClass('hidden');
+    elements.pending_trades_sec.addClass('hidden');
+}
+
 /*
  *  Interaction
  */
 function attachBtnActions() {
     elements.prospects_btn.on('click', function(e) {
-        showAllData();
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.prospects_btn.addClass('active');
+        showAllData();
         elements.page_link.attr('href', 'farmsystems.html');
     });
 
     elements.bryan_btn.on('click', function(e) {
-        showTeamData('bryan');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.bryan_btn.addClass('active');
+        showTeamData('bryan');
         elements.page_link.attr('href', 'farmsystems.html?team=bryan');
     });
 
     elements.cary_btn.on('click', function(e) {
-        showTeamData('cary');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.cary_btn.addClass('active');
+        showTeamData('cary');
         elements.page_link.attr('href', 'farmsystems.html?team=cary');
     });
 
     elements.larry_btn.on('click', function(e) {
-        showTeamData('larry');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.larry_btn.addClass('active');
+        showTeamData('larry');
         elements.page_link.attr('href', 'farmsystems.html?team=larry');
     });
 
     elements.mike_btn.on('click', function(e) {
-        showTeamData('mike');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.mike_btn.addClass('active');
+        showTeamData('mike');
         elements.page_link.attr('href', 'farmsystems.html?team=mike');
     });
 
     elements.mitchel_btn.on('click', function(e) {
-        showTeamData('mitchel');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.mitchel_btn.addClass('active');
+        showTeamData('mitchel');
         elements.page_link.attr('href', 'farmsystems.html?team=mitchel');
     });
 
     elements.tad_btn.on('click', function(e) {
-        showTeamData('tad');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showProspectsTable();
         elements.tad_btn.addClass('active');
+        showTeamData('tad');
         elements.page_link.attr('href', 'farmsystems.html?team=tad');
     });
 
+    elements.completed_trades_btn.on('click', function(e) {
+        e.preventDefault();
+        $('#message').remove();
+        elements.page_link.attr('href', 'farmsystems.html?team=completed');
+    });
+
     elements.pending_trades_btn.on('click', function(e) {
-        elements.message.addClass('hidden');
-
+        e.preventDefault();
+        showPendingTrades();
+        elements.pending_trades_btn.addClass('active');
+        loadAllProspects(pending_trades.load);
+        elements.page_link.attr('href', 'farmsystems.html?team=pending');
     });
 
+    // Submit trade button in menu
     elements.submit_trades_btn.on('click', function(e) {
-        elements.message.addClass('hidden');
-        $('.active').removeClass('active');
+        e.preventDefault();
+        showSubmitTrades();
         elements.submit_trades_btn.addClass('active');
-
-        elements.table.addClass('hidden');
-        elements.submit_trade_sec.removeClass('hidden');
+        elements.page_link.attr('href', 'farmsystems.html?team=submit');
     });
 
+    // Button in the submit trades section
     elements.submit_trade_btn.on('click', function(e) {
-        sendTradeProposal();
+        e.preventDefault();
+        var trade_proposal_json = trades.getTradeProposal();
+        if (trade_proposal_json) {
+            trades.sendTradeProposal(JSON.stringify(trade_proposal_json));
+        } else {
+            showError('Invalid Trade Proposal', 'If one team is trading no prospects, select \'[No Prospects]\'');
+        }
     });
 
     elements.cancel_trade_btn.on('click', function(e) {
-
-    });
-
-    $('#table').on('keyup change', '#filter-player', function (e) {
-        elements.active_datatable.columns().search(this.value).draw();
-    });
-
-    $(".close").click(function(){
-        elements.message.alert();
+        e.preventDefault();
+        trades.resetTrade();
     });
 }
 
@@ -513,5 +511,4 @@ function attachBtnActions() {
 
 $(document).ready(function() {
     start();
-    trades.initTrades();
 });

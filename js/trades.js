@@ -1,11 +1,6 @@
 var trades_config = {
-    num_propsect_spots: 6
-};
-
-var trade_elements = {
-    team1: null,
-    team2: null,
-    submit_trade_form: null
+    num_propsect_spots: 6,
+    tradeSentMsg_success: 'The trade proposal was successfully submitted (You can view it in <i>Pending Trades</i>)'
 };
 
 function initTrades() {
@@ -33,7 +28,7 @@ function getTeamProspects(team, column) {
         "team" : team
     }));
     $.ajax({
-        url: config.mongolabURL + 'baseball/collections/team_prospects?q=' + query + '&apiKey=' + config.mongolabApiKey,
+        url: config.mongolabURL + config.team_prospectsURL + '?q=' + query + '&apiKey=' + config.mongolabApiKey,
         dataType: 'json',
         type: 'GET'
     }).done(function(data){
@@ -50,6 +45,10 @@ function getTeamProspects(team, column) {
 
         prospect_selects.empty();
         prospect_selects.append('<option></option>');
+
+        $('#team' + column + '-p1').append($('<option></option>')
+            .attr('value', 'No Prospects').html("[No Prospects]"));
+
         $.each(prospects, function(index, player){
             var prospect_option = $('<option></option>');
             prospect_option.attr('value', player._id.$oid);
@@ -61,7 +60,11 @@ function getTeamProspects(team, column) {
     });
 }
 
-
+/**
+ * Returns all selected players including 'No Prospects' so take that into account, but not 'None'
+ * @param column
+ * @returns {Array}
+ */
 function getSelectedPlayers(column) {
     var player_ids = [];
     for(var i = 1; i <= trades_config.num_propsect_spots; ++i) {
@@ -107,11 +110,35 @@ function updatePlayerSelects(column, exclude_select) {
 
 
     $.each(disable_players, function(index, player_id){
-        all_but_current.find('option[value="' + player_id + '"]').attr('disabled', 'disabled');
+        if (player_id !== 'No Prospects') {
+            all_but_current.find('option[value="' + player_id + '"]').attr('disabled', 'disabled');
+        }
     });
     $.each(enabled_players, function(index, player_id){
-        prospect_selects.find('option[value="' + player_id + '"]').removeAttr('disabled');
+        if (player_id !== 'No Prospects') {
+            prospect_selects.find('option[value="' + player_id + '"]').removeAttr('disabled');
+        }
     });
+    $('.chosen-select').trigger("chosen:updated");
+}
+
+function clearTable() {
+    var team1_select = $('#team1');
+    var team2_select = $('#team2');
+    team1_select.val('');
+    team1_select.find('option').removeAttr('disabled');
+    team2_select.val('');
+    team2_select.find('option').removeAttr('disabled');
+
+    var trade_form = $('#submit_trade_form');
+    var column1 = trade_form.find('tbody').find('td:nth-child(2)').find('select');
+    var column2 = trade_form.find('tbody').find('td:nth-child(3)').find('select');
+    column1.empty();
+    column1.append('<option></option>');
+
+    column2.empty();
+    column2.append('<option></option>');
+
     $('.chosen-select').trigger("chosen:updated");
 }
 
@@ -149,6 +176,25 @@ function teamSelection() {
     });
 }
 
+function sendTradeProposal(trade_proposal_json) {
+    return $.ajax({
+        url: config.mongolabURL + config.pending_tradesURL + '?apiKey=' + config.mongolabApiKey,
+        data: trade_proposal_json,
+        contentType: 'application/json',
+        type: 'POST'
+    }).done(function(data){
+        showSuccess('Success', trades_config.tradeSentMsg_success);
+        clearTable();
+        return 1;
+    }).fail(function(){
+        showError('Error', 'Failed to send Trade Proposal (Network connection issues?)');
+    });
+}
+
+/**
+ *
+ * @returns boolean (false) if error | json
+ */
 function getTradeProposalAsJson() {
     var team1 = $('#team1').find('option:selected').val();
     var team2 = $('#team2').find('option:selected').val();
@@ -156,19 +202,30 @@ function getTradeProposalAsJson() {
     var team1_players = getSelectedPlayers(1);
     var team2_players = getSelectedPlayers(2);
 
+    console.log(team1_players);
+    console.log(team2_players);
+
+    if ((team1_players.length === 0 || team2_players.length === 0) ||
+        ($.inArray('No Prospects', team1_players) >= 0 && $.inArray('No Prospects', team2_players) >= 0)) {
+        return false;
+    }
+
     return {
         'team1': {
             'team': team1,
-            'proposed': team1_players
+            'offering': $.inArray('No Prospects', team1_players) < 0 ? team1_players : ['No Prospects']
         },
         'team2': {
             'team': team2,
-            'proposed': team2_players
-        }
+            'offering': $.inArray('No Prospects', team2_players) < 0 ? team2_players : ['No Prospects']
+        },
+        'timestamp': getPCT().toLocaleString()
     }
 }
 
 var trades = {
-    initTrades: initTrades,
-    getTradeProposal: getTradeProposalAsJson
+    init: initTrades,
+    getTradeProposal: getTradeProposalAsJson,
+    resetTrade: clearTable,
+    sendTradeProposal: sendTradeProposal
 };

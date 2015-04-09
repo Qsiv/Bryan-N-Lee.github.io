@@ -18,16 +18,24 @@ main {
     background-color: #f2f2f2;
     font-size: 12px;
     float: left;
+    overflow-y: auto;
+    position: fixed;
 }
 
 /* * * * * *
  *  Buttons
  * * * * * */
 
+.last-button {
+    margin-bottom: 30px;
+}
+
 .button {
     background-color: #00483A;
     color: #fff;
-    margin: 30px auto 0 auto;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     width: 83%;
     cursor: pointer;
@@ -96,6 +104,15 @@ main {
     border: 1px solid #00483A;
 }
 
+/*  I don't know why, but I need this
+    so the buttons don't have the underline
+    for like a split second when clicked
+ */
+#menu a {
+    color: #fff;
+    text-decoration: none;
+}
+
 .submit {
     background-color: #1684d2;
     border-color: #1564a3;
@@ -136,7 +153,8 @@ main {
 }
 
 #submit_trade_sec {
-    margin-top: 45px;
+    position: absolute;
+    top: 65px;
     margin-left: 50px;
 }
 
@@ -155,10 +173,8 @@ main {
 
 #prospects_table {
     border-bottom: 0;
-}
-
-#prospects_table_wrapper {
-    margin-top: 34px;
+    top: 16px;
+    position: relative;
 }
 
 table.dataTable thead td {
@@ -176,11 +192,10 @@ table.dataTable .even {
     box-sizing:border-box;
     border: 1px solid #000;
     background-color: #fafafa;
-
 }
 
 #prospects_table thead tr td {
-    border: 0px;
+    border: 0;
 }
 
 .grade_a {
@@ -215,10 +230,14 @@ input {
     margin: 60px auto 0 auto;
     border: 1px solid #763838;
     border-radius: 2px;
-    width: 83%;
-    height: 15%;
+    width: 750px;
+    height: 78px;
     line-height: 17px;
     background-color: #FFCBCA;
+    z-index: 2;
+    position: relative;
+    top: 28%;
+    overflow-y: auto;
 }
 
 .hidden {

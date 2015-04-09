@@ -1,0 +1,68 @@
+
+/*td {*/
+    /*border: 1px solid #000;*/
+/*}*/
+
+#pending_trades_table {
+    border-bottom: 0;
+}
+
+#pending_trades_table thead tr td {
+    border: 0;
+}
+
+/* Player lists */
+#pending_trades_sec ul {
+    padding: 0 10px 10px 17px;
+    margin: 0;
+}
+
+/* Headers */
+#pending_trades_sec thead td {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Occurred Column */
+#pending_trades_sec tr td:first-child {
+    vertical-align: top;
+    padding-right: 10px;
+    text-align: center;
+}
+
+/* Team 1 */
+#pending_trades_sec tr td:nth-child(2) {
+    vertical-align: top;
+    text-align: center;
+}
+
+/* Team 1 offerings */
+#pending_trades_sec tbody tr td:nth-child(3) {
+    vertical-align: top;
+    padding-left: 4%;
+}
+
+/* Team 2 */
+#pending_trades_sec tr td:nth-child(4) {
+    vertical-align: top;
+    padding-left: 10px;
+    text-align: center;
+}
+
+/* Team 2 offerings */
+#pending_trades_sec tbody tr td:nth-child(5) {
+    vertical-align: top;
+    padding-left: 4%;
+}
+
+/* TODO DUPLICATE */
+table.dataTable .even {
+    box-sizing:border-box;
+    border: 1px solid #000;
+    background-color: #fafafa;
+}
+
+table.dataTable thead td {
+    font-size: 1.15em;
+    font-weight: bold;
+}
